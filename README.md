@@ -21,7 +21,7 @@
 
 <div align="center">
 
-<img src="docs/sc.png" alt="The Huckleberry sidebar: macro list, live run panel and activity log" width="880">
+<img src="docs/cover.png" alt="The Huckleberry sidebar: macro list, live run panel and activity log" width="880">
 
 <sub>The Huckleberry sidebar — compact macro rows, a live run panel with the AI orb, and a streaming activity log.</sub>
 
