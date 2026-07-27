@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huckleberry</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <img class="logo" src="../../icons/icon48.png" alt="">
+    <div class="brand-txt">
+      <h1>Huckleberry</h1>
+      <p class="tag">Autopilot for your browser</p>
+    </div>
+  </div>
+  <span id="dot" class="dot idle" title="idle" aria-label="status"></span>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab is-active" data-tab="run" role="tab">Run</button>
+  <button class="tab" data-tab="ai" role="tab">AI</button>
+  <button class="tab" data-tab="sites" role="tab">Sites</button>
+  <button class="tab" data-tab="tg" role="tab">Telegram</button>
+  <button class="tab" data-tab="guide" role="tab">Guide</button>
+  <button class="tab" data-tab="about" role="tab">About</button>
+</nav>
+
+<main>
+  <!-- ── RUN ─────────────────────────────────────────────── -->
+  <section id="run" class="pane is-active" role="tabpanel">
+    <div class="row">
+      <button id="btnRun" class="btn btn-primary">Run autopilot</button>
+      <button id="btnStop" class="btn">Stop</button>
+    </div>
+
+    <div class="stats card">
+      <div><b id="stRuns">0</b><span>runs</span></div>
+      <div><b id="stAns">0</b><span>answers</span></div>
+      <div><b id="stFound">&ndash;</b><span>detected</span></div>
+    </div>
+
+    <div class="progress" role="progressbar" aria-label="run progress"><div id="bar"></div></div>
+    <p id="nowQ" class="muted">Idle. Open the page with the questions, then hit Run.</p>
+
+    <div class="card">
+      <div class="card-h">Options</div>
+      <div class="row row-tight">
+        <button id="btnScan" class="btn btn-sm">Scan only</button>
+        <label class="chk"><input type="checkbox" id="autoSubmit"><span>Submit form when done</span></label>
+      </div>
+      <label class="fld">
+        <span class="fld-l">Pacing between answers &mdash; <b id="delayVal">700</b> ms</span>
+        <input type="range" id="delayMs" min="0" max="4000" step="100">
+      </label>
+    </div>
+
+    <div class="card">
+      <div class="card-h">Activity <button id="btnClear" class="linkbtn">clear</button></div>
+      <ul id="log" class="log"></ul>
+    </div>
+  </section>
+
+  <!-- ── AI ──────────────────────────────────────────────── -->
+  <section id="ai" class="pane" role="tabpanel">
+    <label class="fld">
+      <span class="fld-l">Provider</span>
+      <select id="provider">
+        <option value="gemini">Google Gemini</option>
+        <option value="openai">OpenAI-compatible (OpenAI / OpenRouter / Groq / custom)</option>
+        <option value="anthropic">Anthropic Claude</option>
+        <option value="ollama">Ollama (local)</option>
+      </select>
+    </label>
+
+    <label class="fld">
+      <span class="fld-l">API key</span>
+      <input type="password" id="apiKey" autocomplete="off" placeholder="AIza… / sk-…">
+    </label>
+
+    <label class="fld">
+      <span class="fld-l">Base URL <i>optional override</i></span>
+      <input id="baseUrl" placeholder="https://generativelanguage.googleapis.com/v1beta">
+    </label>
+
+    <label class="fld">
+      <span class="fld-l">Model</span>
+      <input id="model" list="modelList" placeholder="gemini-2.5-flash">
+      <datalist id="modelList"></datalist>
+    </label>
+
+    <label class="fld">
+      <span class="fld-l">Temperature &mdash; <b id="tempVal">0.2</b></span>
+      <input type="range" id="temperature" min="0" max="1" step="0.1">
+    </label>
+
+    <label class="fld">
+      <span class="fld-l">System prompt</span>
+      <textarea id="systemPrompt" rows="5"></textarea>
+    </label>
+
+    <div class="row row-tight">
+      <button id="btnTestAI" class="btn btn-sm">Test connection</button>
+      <button id="btnModels" class="btn btn-sm">Load models</button>
+    </div>
+    <p id="aiResult" class="muted"></p>
+  </section>
+
+  <!-- ── SITES ───────────────────────────────────────────── -->
+  <section id="sites" class="pane" role="tabpanel">
+    <p class="muted">Stored locally in <code>chrome.storage.local</code>. Credentials are typed into the site itself and are never sent anywhere else.</p>
+    <div id="credList"></div>
+    <button id="btnAddCred" class="btn btn-sm">Add site</button>
+  </section>
+
+  <!-- ── TELEGRAM ────────────────────────────────────────── -->
+  <section id="tg" class="pane" role="tabpanel">
+    <label class="chk chk-lg"><input type="checkbox" id="tgEnabled"><span>Enable Telegram control</span></label>
+    <label class="fld">
+      <span class="fld-l">Bot token</span>
+      <input type="password" id="tgToken" autocomplete="off" placeholder="123456:ABC-DEF…">
+    </label>
+    <label class="fld">
+      <span class="fld-l">Chat ID <i>empty = bind first sender</i></span>
+      <input id="tgChatId" placeholder="123456789">
+    </label>
+    <button id="btnTestTg" class="btn btn-sm">Test bot</button>
+    <p id="tgResult" class="muted"></p>
+
+    <div class="card">
+      <div class="card-h">Commands</div>
+      <ul class="kv">
+        <li><code>/run</code><span>autopilot on the active tab</span></li>
+        <li><code>/stop</code><span>abort the current run</span></li>
+        <li><code>/status</code><span>state, stats, model</span></li>
+        <li><code>/ask …</code><span>one-off question</span></li>
+        <li><code>/open url</code><span>open a tab</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── GUIDE ───────────────────────────────────────────── -->
+  <section id="guide" class="pane" role="tabpanel">
+    <ol class="steps">
+      <li><b>Pick the brain.</b> AI tab &rarr; provider, key, model &rarr; <i>Test connection</i>.</li>
+      <li><b>Teach it a site.</b> Sites tab &rarr; host plus username and password. Add CSS selectors only if auto-detection misses.</li>
+      <li><b>Run.</b> Open the page and press <i>Run autopilot</i>. Detected blocks glow violet, answered ones turn green.</li>
+      <li><b>Go remote.</b> Telegram tab &rarr; token &rarr; send <code>/run</code> from your phone.</li>
+    </ol>
+    <div class="card">
+      <div class="card-h">Troubleshooting</div>
+      <ul class="kv">
+        <li><code>0 detected</code><span>page renders late; scroll once, then Scan</span></li>
+        <li><code>no matching choice</code><span>lower temperature or keep the verbatim rule in the prompt</span></li>
+        <li><code>HTTP 400</code><span>model name not valid for the provider; press Load models</span></li>
+        <li><code>HTTP 401 / 403</code><span>wrong key, or key not enabled for that API</span></li>
+        <li><code>HTTP 429</code><span>rate limited; Huckleberry retries with backoff</span></li>
+        <li><code>iframe</code><span>runs in all frames; click inside the frame first</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ───────────────────────────────────────────── -->
+  <section id="about" class="pane" role="tabpanel">
+    <div class="hero">
+      <img src="../../icons/icon128.png" width="64" height="64" alt="">
+      <h2>Huckleberry <span class="ver">v1.1.0</span></h2>
+      <p>A browser-native autopilot. It signs in, reads the questions, thinks with the model you choose, and writes the answers back &mdash; locally, inside your own session.</p>
+    </div>
+    <ul class="kv">
+      <li><code>engine</code><span>Chrome MV3 &middot; no dependencies &middot; no servers</span></li>
+      <li><code>models</code><span>Gemini &middot; OpenAI-compatible &middot; Claude &middot; Ollama</span></li>
+      <li><code>privacy</code><span>keys and passwords stay on your machine</span></li>
+      <li><code>author</code><span>Mersad Shahidi</span></li>
+      <li><code>license</code><span>PolyForm Noncommercial 1.0.0</span></li>
+    </ul>
+    <p class="muted">Use it where automation is allowed. You own what you automate.</p>
+  </section>
+</main>
+
+<script src="panel.js"></script>
+</body>
+</html>

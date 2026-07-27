@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huckleberry</title>
+<link rel="stylesheet" href="../ui/theme.css">
+<link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<div class="app">
+
+  <header class="hd">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4"></path><circle cx="8.5" cy="14" r="4.5"></circle><circle cx="15.5" cy="14" r="4.5"></circle>
+        </svg>
+      </span>
+      <div class="brand-txt">
+        <strong>Huckleberry</strong>
+        <span class="chip" id="verChip">v0.3.1</span>
+      </div>
+    </div>
+    <div class="row">
+      <button class="icon-btn" id="btnAbout" title="About the developer" aria-label="About the developer">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btnSettings" title="Settings" aria-label="Settings">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="strip" id="statusStrip">
+    <span class="chip" id="statusChip"><span class="dot" id="statusDot"></span><span class="strip-txt" id="statusTxt">Idle</span></span>
+    <span class="chip chip-brand" id="aiChip">engine</span>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="macros">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h10"></path></svg>
+      Macros
+    </button>
+    <button class="tab" data-tab="run">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l14 8-14 8z"></path></svg>
+      Run
+    </button>
+    <button class="tab" data-tab="history">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 2"></path></svg>
+      History
+    </button>
+  </nav>
+
+  <main class="body">
+
+    <!-- ------------------------- macros ------------------------- -->
+    <section class="panel active" id="panel-macros">
+      <div class="card rec">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"></circle></svg>
+          Record a new macro
+        </div>
+        <div class="stack">
+          <input type="text" id="recUrl" placeholder="Start URL (optional — blank uses the active tab)" autocomplete="off">
+          <button class="btn btn-primary btn-rec btn-block" id="btnRecord">
+            <span class="rec-dot"></span>
+            Start recording
+          </button>
+          <p class="hint">The recorder panel opens on the page. Pick elements, mark the question area, then save.</p>
+        </div>
+      </div>
+
+      <div class="sec-head">
+        <h3>Saved macros</h3>
+        <div class="row">
+          <button class="btn btn-ghost btn-sm" id="btnExport">Export</button>
+          <button class="btn btn-ghost btn-sm" id="btnImport">Import</button>
+          <input type="file" id="fileImport" accept="application/json,.json" hidden>
+        </div>
+      </div>
+      <div id="macroList" class="stack"></div>
+    </section>
+
+    <!-- ------------------------- run ------------------------- -->
+    <section class="panel" id="panel-run">
+      <div class="card">
+        <div class="orb-stage">
+          <div class="orb" aria-hidden="true">
+            <div class="orb-halo"></div>
+            <div class="orb-ring"></div>
+            <div class="orb-ring r2"></div>
+            <div class="orb-core"></div>
+            <div class="orb-sat s1"></div>
+            <div class="orb-sat s2"></div>
+            <div class="orb-sat s3"></div>
+          </div>
+          <div class="run-title">
+            <b id="runMacro">No run in progress</b>
+            <span class="badge idle" id="runBadge">idle</span>
+          </div>
+          <div class="run-sub" id="runCurrent">Start a macro from the Macros tab.</div>
+        </div>
+
+        <div class="scanline"><i></i></div>
+
+        <div class="stats">
+          <div class="stat"><b id="statAnswered">0</b><span>Answered</span></div>
+          <div class="stat"><b id="statAssists">0</b><span>Manual</span></div>
+          <div class="stat"><b id="statElapsed">0:00</b><span>Elapsed</span></div>
+        </div>
+
+        <button class="btn btn-danger btn-block" id="btnStop" style="margin-top:12px" disabled>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+          Stop the run
+        </button>
+      </div>
+
+      <div class="card box-confirm" id="confirmBox" hidden>
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>
+          Waiting for confirmation
+        </div>
+        <p id="confirmMsg"></p>
+        <div class="row" style="margin-top:12px">
+          <button class="btn btn-primary grow" id="btnConfirmYes">Continue</button>
+          <button class="btn btn-ghost" id="btnConfirmNo">Finish</button>
+        </div>
+      </div>
+
+      <div class="card box-assist" id="assistBox" hidden>
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+          The AI engine stalled
+        </div>
+        <p class="hint" id="assistReason"></p>
+        <div class="assist-q" id="assistQuestion"></div>
+        <div class="stack" style="margin-top:10px">
+          <textarea id="assistAnswer" placeholder="Type the correct option exactly as it appears on the page…"></textarea>
+          <div class="row">
+            <button class="btn btn-primary grow" id="btnSendAnswer">Send answer and resume</button>
+            <button class="btn btn-ghost" id="btnRetryAi">Retry AI</button>
+          </div>
+          <p class="hint">Shortcut: Ctrl + Enter. Remaining questions continue automatically.</p>
+        </div>
+      </div>
+
+      <div class="sec-head">
+        <h3>Live log</h3>
+        <button class="btn btn-ghost btn-sm" id="btnClearLog">Clear</button>
+      </div>
+      <div class="log" id="log"></div>
+    </section>
+
+    <!-- ------------------------- history ------------------------- -->
+    <section class="panel" id="panel-history">
+      <div class="sec-head">
+        <h3>Recent runs</h3>
+        <button class="btn btn-ghost btn-sm" id="btnClearHistory">Clear</button>
+      </div>
+      <div id="historyList" class="stack"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="sidebar.js"></script>
+</body>
+</html>

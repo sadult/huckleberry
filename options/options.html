@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huckleberry — Settings</title>
+<link rel="stylesheet" href="../ui/theme.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- ============================ nav ============================ -->
+  <aside class="nav">
+    <div class="nav-brand">
+      <span class="logo" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4"></path><circle cx="8.5" cy="14" r="4.5"></circle><circle cx="15.5" cy="14" r="4.5"></circle>
+        </svg>
+      </span>
+      <div>
+        <strong>Huckleberry</strong>
+        <small class="hint" id="verLabel">v0.3.1</small>
+      </div>
+    </div>
+
+    <div class="nav-list" id="navList">
+      <button class="nav-item active" data-tab="providers">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="14" width="18" height="6" rx="2"></rect><path d="M7 7.5h.01"></path><path d="M7 17h.01"></path></svg>
+        Providers
+      </button>
+      <button class="nav-item" data-tab="engine">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a4 4 0 0 1 4 4v1a4 4 0 0 1 0 8v1a4 4 0 0 1-8 0v-1a4 4 0 0 1 0-8V7a4 4 0 0 1 4-4z"></path></svg>
+        AI engine
+      </button>
+      <button class="nav-item" data-tab="memory">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg>
+        Memory
+      </button>
+      <button class="nav-item" data-tab="telegram">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l5 2 2 6 3-4 5 4z"></path></svg>
+        Telegram
+      </button>
+      <button class="nav-item" data-tab="run">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+        Run behavior
+      </button>
+      <button class="nav-item" data-tab="data">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>
+        Data
+      </button>
+      <button class="nav-item" data-tab="about">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"></path></svg>
+        Developer
+      </button>
+    </div>
+
+    <div class="nav-foot">
+      <span class="chip" id="savedChip">Changes save automatically</span>
+    </div>
+  </aside>
+
+  <!-- ============================ content ============================ -->
+  <main class="content">
+
+    <!-- ---------------- providers ---------------- -->
+    <section class="page active" id="page-providers">
+      <div class="page-hd">
+        <h1>AI providers</h1>
+        <p>Add real API keys, test them in one click, and choose which provider answers your questions. Keys are stored only in this browser profile and are sent nowhere except to the provider you select.</p>
+      </div>
+
+      <div class="section-head">
+        <h3>Configured providers</h3>
+        <button class="btn btn-primary btn-sm" id="btnAddProvider">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          Add provider
+        </button>
+      </div>
+
+      <div class="card form-card" id="providerForm" hidden>
+        <div class="card-title" id="formTitle">Add a provider</div>
+        <input type="hidden" id="pId">
+        <div class="grid-2">
+          <div class="field span-2">
+            <label for="pPreset">Preset</label>
+            <select id="pPreset"></select>
+            <span class="hint">Pick a preset to fill in the endpoint and model, or configure any OpenAI-compatible service yourself.</span>
+          </div>
+          <div class="field">
+            <label for="pLabel">Display name</label>
+            <input type="text" id="pLabel" placeholder="My provider" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="pKind">API format</label>
+            <select id="pKind">
+              <option value="openai">OpenAI-compatible (/chat/completions)</option>
+              <option value="gemini">Google Gemini (generateContent)</option>
+              <option value="anthropic">Anthropic (/messages)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pModel">Model</label>
+            <input type="text" id="pModel" placeholder="gemini-2.5-flash" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="pBase">Base URL</label>
+            <input type="text" id="pBase" placeholder="https://api.example.com/v1" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="field span-2">
+            <label for="pKey">API key</label>
+            <div class="row">
+              <input type="password" id="pKey" class="grow" placeholder="Paste the API key" autocomplete="off" spellcheck="false">
+              <button class="btn btn-ghost btn-sm" id="btnPeekKey" type="button">Show</button>
+            </div>
+            <span class="hint" id="pKeyHint"></span>
+          </div>
+        </div>
+        <div class="row wrap" style="margin-top:16px">
+          <button class="btn btn-primary" id="btnSaveProvider">Save provider</button>
+          <button class="btn" id="btnTestForm">Test connection</button>
+          <button class="btn btn-ghost" id="btnCancelForm">Cancel</button>
+          <span class="test-out" id="formTestOut"></span>
+        </div>
+      </div>
+
+      <div class="stack" id="providerList" style="margin-top:12px"></div>
+    </section>
+
+    <!-- ---------------- engine ---------------- -->
+    <section class="page" id="page-engine">
+      <div class="page-hd">
+        <h1>AI engine</h1>
+        <p>Answer questions through a provider API, or through a browser tab you are already logged into. Tab mode needs no API key at all.</p>
+      </div>
+
+      <div class="card">
+        <div class="seg" id="modeSeg">
+          <button class="seg-btn" data-mode="api">Provider API</button>
+          <button class="seg-btn" data-mode="tab">Browser tab (no key)</button>
+        </div>
+
+        <div class="sub-box" id="tabModeBox">
+          <div class="field">
+            <label for="tabProvider">Which tab should answer?</label>
+            <select id="tabProvider">
+              <option value="gemini">Gemini (gemini.google.com)</option>
+              <option value="chatgpt">ChatGPT (chatgpt.com)</option>
+            </select>
+            <span class="hint">Stay logged in to that site. Huckleberry types the question into the composer and reads the reply back.</span>
+          </div>
+        </div>
+
+        <div class="row wrap" style="margin-top:16px">
+          <button class="btn btn-primary" id="btnTestEngine">Test the active engine</button>
+          <span class="test-out" id="engineTestOut"></span>
+        </div>
+      </div>
+
+      <div class="section-head"><h3>Stall recovery</h3></div>
+      <div class="card">
+        <label class="check">
+          <input type="checkbox" id="assistOnStall">
+          <span>Ask me to answer manually when the engine stalls
+            <small>Tab mode can freeze after several questions. Instead of failing the run, Huckleberry refreshes the chat, then pauses and asks you for that one answer before continuing on its own.</small>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ---------------- memory ---------------- -->
+    <section class="page" id="page-memory">
+      <div class="page-hd">
+        <h1>Questionnaire memory</h1>
+        <p>Describe the questionnaire once. The text below is sent with every question, so the AI keeps the same persona and rules for the whole run.</p>
+      </div>
+      <div class="card">
+        <label class="check" style="margin-bottom:14px">
+          <input type="checkbox" id="memoryEnabled">
+          <span>Send this context with every question</span>
+        </label>
+        <div class="field">
+          <label for="questionnaireContext">Persistent context</label>
+          <textarea id="questionnaireContext" rows="9" placeholder="Example: I am a 27-year-old software engineer answering a workplace wellbeing survey. Prefer moderate answers and never pick the extremes."></textarea>
+          <span class="hint">Plain language works best. Keep it short and factual.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- telegram ---------------- -->
+    <section class="page" id="page-telegram">
+      <div class="page-hd">
+        <h1>Telegram remote control</h1>
+        <p>Optional. Get progress alerts and drive a run from your phone — including answering the question the AI got stuck on.</p>
+      </div>
+
+      <div class="card">
+        <label class="check" style="margin-bottom:14px">
+          <input type="checkbox" id="telegramEnabled">
+          <span>Enable the Telegram bridge</span>
+        </label>
+        <div class="grid-2">
+          <div class="field">
+            <label for="telegramToken">Bot token</label>
+            <input type="password" id="telegramToken" placeholder="123456:ABC-DEF…" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="field">
+            <label for="telegramChatId">Your chat ID</label>
+            <input type="text" id="telegramChatId" placeholder="123456789" autocomplete="off">
+          </div>
+        </div>
+        <div class="row wrap" style="margin-top:16px">
+          <button class="btn btn-primary" id="btnTestTelegram">Send a test message</button>
+          <span class="test-out" id="tgTestOut"></span>
+        </div>
+      </div>
+
+      <div class="section-head"><h3>Setup</h3></div>
+      <div class="card">
+        <ol class="guide">
+          <li>Open <b>@BotFather</b> in Telegram and send <em>/newbot</em>. Copy the token it gives you.</li>
+          <li>Send any message to your new bot so it can reply to you.</li>
+          <li>Get your numeric chat ID from <b>@userinfobot</b>, paste both values above, then send the test message.</li>
+        </ol>
+      </div>
+
+      <div class="section-head"><h3>Commands</h3></div>
+      <div class="card">
+        <ul class="cmd-list">
+          <li><code>/list</code>list saved macros</li>
+          <li><code>/run 1</code>run a macro by number or name</li>
+          <li><code>/skip 1</code>run and jump straight to the questions</li>
+          <li><code>/status</code>current run status</li>
+          <li><code>/answer text</code>answer the question the AI got stuck on</li>
+          <li><code>/retry</code>ask the AI again for that question</li>
+          <li><code>/next</code>confirm and continue with the next questionnaire</li>
+          <li><code>/stop</code>stop the run</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ---------------- run behavior ---------------- -->
+    <section class="page" id="page-run">
+      <div class="page-hd">
+        <h1>Run behavior</h1>
+        <p>Timing and reliability controls for the replay engine. The defaults suit most questionnaires.</p>
+      </div>
+      <div class="card">
+        <div class="grid-2">
+          <div class="field">
+            <label for="stepDelayMs">Delay between steps (ms)</label>
+            <input type="number" id="stepDelayMs" min="200" max="20000" step="100">
+            <span class="hint">Give slow pages more time to react.</span>
+          </div>
+          <div class="field">
+            <label for="maxLoops">Maximum loop iterations</label>
+            <input type="number" id="maxLoops" min="1" max="5000" step="1">
+            <span class="hint">Safety limit for question loops.</span>
+          </div>
+          <div class="field">
+            <label for="aiTimeoutMs">AI timeout (ms)</label>
+            <input type="number" id="aiTimeoutMs" min="15000" max="600000" step="5000">
+          </div>
+          <div class="field">
+            <label for="aiRetries">Retries per question</label>
+            <input type="number" id="aiRetries" min="0" max="5" step="1">
+          </div>
+          <div class="field span-2">
+            <label for="tabRecycleEvery">Start a fresh AI chat after N answers (tab mode)</label>
+            <input type="number" id="tabRecycleEvery" min="0" max="200" step="1">
+            <span class="hint">The main cause of tab mode freezing is a long chat thread. 5 works well; 0 disables recycling.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- data ---------------- -->
+    <section class="page" id="page-data">
+      <div class="page-hd">
+        <h1>Data</h1>
+        <p>Everything lives in this browser profile. Nothing is uploaded anywhere.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Backup</div>
+        <div class="row wrap">
+          <button class="btn btn-primary" id="btnExportAll">Export macros</button>
+          <button class="btn" id="btnImportAll">Import macros</button>
+          <input type="file" id="fileImportAll" accept="application/json,.json" hidden>
+        </div>
+        <p class="hint" style="margin-top:10px">Exports contain macros only — never your API keys.</p>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">Danger zone</div>
+        <div class="row wrap">
+          <button class="btn btn-danger" id="btnClearHistory">Clear run history</button>
+          <button class="btn btn-danger" id="btnResetAll">Erase everything</button>
+        </div>
+        <p class="hint" style="margin-top:10px">Erasing removes macros, settings, API keys and history from this profile.</p>
+      </div>
+    </section>
+
+    <!-- ---------------- about ---------------- -->
+    <section class="page" id="page-about">
+      <div class="page-hd">
+        <h1>About the developer</h1>
+        <p>Huckleberry is built and maintained by one person. Bug reports and ideas are always welcome.</p>
+      </div>
+
+      <div class="card dev-card">
+        <div class="dev-top">
+          <span class="avatar" aria-hidden="true">MS</span>
+          <div>
+            <h2>Mersad Shahidi</h2>
+            <p class="hint">Developer of Huckleberry <span class="chip chip-brand" id="aboutVersion">v0.3.1</span></p>
+          </div>
+        </div>
+
+        <div class="links">
+          <a class="link-card" href="mailto:mercvd@icloud.com">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+            <span><b>Email</b><small>mercvd@icloud.com</small></span>
+          </a>
+          <a class="link-card" href="https://t.me/Bitologist" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l5 2 2 6 3-4 5 4z"></path></svg>
+            <span><b>Telegram</b><small>@Bitologist</small></span>
+          </a>
+          <a class="link-card" href="https://github.com/sadult" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.5-4-2.5-6-3m12 5v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 6-1.5 6-6.5a5 5 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.4-.4-4.5 1.7a12 12 0 0 0-6 0C4.9 1.6 3.5 2 3.5 2a4.7 4.7 0 0 0-.1 3.5A5 5 0 0 0 2 9c0 5 3 6.2 6 6.5a3.4 3.4 0 0 0-1 2.6V22"></path></svg>
+            <span><b>GitHub</b><small>github.com/sadult</small></span>
+          </a>
+          <a class="link-card" href="https://github.com/sadult/huckleberry/issues" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+            <span><b>Report an issue</b><small>github.com/sadult/huckleberry/issues</small></span>
+          </a>
+        </div>
+
+        <hr class="divider">
+        <p class="hint">Licensed under PolyForm Noncommercial 1.0.0 — free for personal and academic use. Use it responsibly and only where automated answering is allowed.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="options.js"></script>
+</body>
+</html>

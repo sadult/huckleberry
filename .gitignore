@@ -1,0 +1,25 @@
+# build output
+dist/
+*.zip
+
+# editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# local notes and secrets — never commit API keys
+*.local
+.env
+.env.*
+secrets.json
+scratch/
+
+# node (only used for `node --check` lint runs)
+node_modules/
+npm-debug.log*
