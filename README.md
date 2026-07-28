@@ -13,7 +13,6 @@
 [![Firefox](https://img.shields.io/badge/Firefox-115%2B-ff7139?style=flat-square&logo=firefoxbrowser&logoColor=white)](docs/INSTALL.md)
 [![Chrome](https://img.shields.io/badge/Chrome-Edge%20%7C%20Brave-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](docs/INSTALL.md)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-10b981?style=flat-square)](LICENSE)
-[![Providers](https://img.shields.io/badge/AI%20providers-10%20built--in-c084fc?style=flat-square)](docs/PROVIDERS.md)
 
 [Install](#-installation) &nbsp;·&nbsp; [Quick start](#-quick-start) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Providers](#-ai-providers) &nbsp;·&nbsp; [Docs](#-documentation) &nbsp;·&nbsp; [Troubleshooting](#-troubleshooting)
 
@@ -26,38 +25,6 @@
 <sub>The Huckleberry sidebar — compact macro rows, a live run panel with the AI orb, and a streaming activity log.</sub>
 
 </div>
-
----
-
-## Table of contents
-
-1. [What is Huckleberry?](#-what-is-huckleberry)
-2. [Who it is for](#-who-it-is-for)
-3. [Feature tour](#-feature-tour)
-4. [Screenshots and interface](#-screenshots-and-interface)
-5. [Installation](#-installation)
-6. [Quick start](#-quick-start)
-7. [How it works](#-how-it-works)
-8. [The recorder and step types](#-the-recorder-and-step-types)
-9. [AI providers](#-ai-providers)
-10. [Answer engine: API mode vs Tab mode](#-answer-engine-api-mode-vs-tab-mode)
-11. [Stall detection and manual assist](#-stall-detection-and-manual-assist)
-12. [Memory and questionnaire context](#-memory-and-questionnaire-context)
-13. [Telegram notifications](#-telegram-notifications)
-14. [Settings reference](#-settings-reference)
-15. [Import, export and backup](#-import-export-and-backup)
-16. [Privacy and data handling](#-privacy-and-data-handling)
-17. [Permissions explained](#-permissions-explained)
-18. [Project structure](#-project-structure)
-19. [Architecture overview](#-architecture-overview)
-20. [Building from source](#-building-from-source)
-21. [Troubleshooting](#-troubleshooting)
-22. [Roadmap](#-roadmap)
-23. [Contributing](#-contributing)
-24. [Documentation](#-documentation)
-25. [License](#-license)
-26. [Developer and contact](#-developer-and-contact)
-27. [Acknowledgements and disclaimer](#-acknowledgements-and-disclaimer)
 
 ---
 
@@ -350,7 +317,6 @@ Each provider card carries a brand-coloured icon tile so you can identify it at 
 
 Any service exposing an OpenAI-style `/chat/completions` route works. Choose **Custom**, set the base URL, type the model identifier, paste the key if one is needed, and press **Test connection**. This covers self-hosted vLLM, LM Studio, LocalAI, Azure OpenAI-compatible gateways and corporate proxies.
 
-Model recommendations, cost notes and per-provider quirks are collected in **[docs/PROVIDERS.md](docs/PROVIDERS.md)**.
 
 ---
 
@@ -504,54 +470,6 @@ No permission is used for anything beyond the row it appears in.
 
 ---
 
-## 📁 Project structure
-
-```
-huckleberry/
-├── manifest.json              # Firefox / MV3 manifest
-├── manifest.chrome.json       # Chromium manifest (swapped in by build.sh)
-├── background.js              # Orchestrator: state, storage, run loop, AI router
-│
-├── sidebar/
-│   ├── sidebar.html           # Sidebar markup: tabs, orb stage, panels
-│   ├── sidebar.css            # Aurora background, orb animation, compact macro rows
-│   └── sidebar.js             # Macro list, run control, live log, history
-│
-├── options/
-│   ├── options.html           # Seven settings sections
-│   ├── options.css            # Glassy provider cards with brand icon tiles
-│   └── options.js             # Provider manager, engine settings, data tools
-│
-├── content/
-│   ├── selector.js            # Ranked, resilient element-resolution strategies
-│   ├── executor.js            # Performs click / type / extract on the page
-│   └── recorder.js            # Shadow-DOM recorder overlay and step capture
-│
-├── ai/
-│   ├── gemini.js              # Tab-mode bridge for the Gemini web UI
-│   └── chatgpt.js             # Tab-mode bridge for the ChatGPT web UI
-│
-├── ui/
-│   └── theme.css              # Shared design tokens: colours, radii, spacing, shadows
-│
-├── icons/                     # Extension icons, 16 – 128 px
-├── docs/
-│   ├── logo.png               # Project logo
-│   ├── sc.png                 # Interface screenshot
-│   ├── INSTALL.md             # Per-platform installation
-│   ├── USER-GUIDE.md          # Recording and running, in depth
-│   ├── PROVIDERS.md           # Provider setup, models, costs
-│   ├── ARCHITECTURE.md        # Internals, message contracts, data shapes
-│   └── TROUBLESHOOTING.md     # Symptom → cause → fix
-│
-├── .github/workflows/build.yml # CI: syntax checks, manifest validation, packaging
-├── build.sh                    # Builds Firefox, Chrome and source archives
-├── CHANGELOG.md · CONTRIBUTING.md · SECURITY.md · PRIVACY.md · LICENSE
-└── README.md
-```
-
----
-
 ## 🏗 Architecture overview
 
 ### One source of truth
@@ -667,22 +585,6 @@ Contributions are genuinely welcome — especially selector-strategy improvement
 6. Update `CHANGELOG.md` and open a pull request describing what you changed and how you verified it.
 
 Full guidelines, commit-message conventions and the code of conduct are in **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-
----
-
-## 📚 Documentation
-
-| Document | Contents |
-| :-- | :-- |
-| **[docs/INSTALL.md](docs/INSTALL.md)** | Installation for Firefox and every Chromium browser, plus signing and updating. |
-| **[docs/USER-GUIDE.md](docs/USER-GUIDE.md)** | Recording, editing and running macros in depth, with worked examples. |
-| **[docs/PROVIDERS.md](docs/PROVIDERS.md)** | Per-provider setup, model choices, costs and known quirks. |
-| **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | Internals: message contracts, storage schemas, run-state shapes. |
-| **[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** | The full symptom → cause → fix matrix. |
-| **[CHANGELOG.md](CHANGELOG.md)** | Version history and release notes. |
-| **[CONTRIBUTING.md](CONTRIBUTING.md)** | How to contribute, and the code of conduct. |
-| **[SECURITY.md](SECURITY.md)** | Vulnerability reporting policy. |
-| **[PRIVACY.md](PRIVACY.md)** | Exactly what data exists and where it goes. |
 
 ---
 
